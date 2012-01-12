@@ -1,5 +1,5 @@
 import copy
-__all__ = ["DummyConfig"]
+__all__ = ["DummyConfig", "DummyOption"]
 
 class DummyConfig(object):
     default = {}
@@ -17,3 +17,12 @@ def bind(obj, config):
     for k, v in config.items():
         setattr(obj, k, v)
     return obj
+
+class DummyOption(DummyConfig):
+    default  =  dict(type = "PNG", 
+                     output = "dummy.png", 
+                     fontmap = None, 
+                     antialias = False, 
+                     nodoctype = False, 
+                     font = []
+                     )
