@@ -1,42 +1,34 @@
-from util.gensym import UniqPath
+import blockdiag
+import blockdiag.parser
+import blockdiag.drawer
+import blockdiag.builder
 from util.dummy import DummyOption
+from blockdiag.utils.bootstrap import Application
 
-def make_application(_options):
-    import blockdiag
-    import blockdiag.parser
-    import blockdiag.drawer
-    import blockdiag.builder
-    from blockdiag.utils.bootstrap import Application
+class DummyApplication(Application):
+    module = blockdiag
 
-    class DummyApplication(Application):
-        options = _options
-        module = blockdiag
-        def parse_diagram(self, string):
-            return self.module.parser.parse_string(string)
+    def __init__(self, options):
+        self.options = options
 
-        def run(self, string):
-            self.create_fontmap()
-            return self.build_diagram(self.parse_diagram(string))
-    return DummyApplication()
+    def parse_diagram(self, string):
+        return self.module.parser.parse_string(string)
+    
+    def run(self, string):
+        self.create_fontmap()
+        return self.build_diagram(self.parse_diagram(string))
 
 class DiagShell(object):
-    def __init__(self, filename, option):
-        self.option = option
-        self.filename = filename
-
-    def _filename(self):
-        filename = self.filename
-        if callable(filename):
-            filename = filename()
-        return filename
+    def __init__(self, app):
+        self.app = app
 
     def eval(self, string):
-        filename = self._filename()
-        self.option.output = filename
-        app = make_application(self.option)
-        app.run(string)
-        return filename
+        return self.app.run(string)
 
-uniq_path = UniqPath(suffix=".png")
-shell = DiagShell(uniq_path.generate, DummyOption())
+app = DummyApplication(DummyOption())
+import extend
+app = extend.extend(app)
+shell = DiagShell(app)
+
 shell.eval(u"diagram { a -> b;}")
+

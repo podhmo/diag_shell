@@ -26,3 +26,7 @@ class DummyOption(DummyConfig):
                      nodoctype = False, 
                      font = []
                      )
+
+    def rename(self, name):
+        self.output = name
+
