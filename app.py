@@ -18,17 +18,18 @@ class DummyApplication(Application):
         self.create_fontmap()
         return self.build_diagram(self.parse_diagram(string))
 
-class DiagShell(object):
+class CommandMixin(object):
+    def blockdiag(self, string):
+        return self.app.run(string)
+
+class DiagShell(CommandMixin):
     def __init__(self, app):
         self.app = app
-
-    def eval(self, string):
-        return self.app.run(string)
 
 app = DummyApplication(DummyOption())
 import extend
 app = extend.extend(app)
 shell = DiagShell(app)
 
-shell.eval(u"diagram { a -> b;}")
+shell.blockdiag(u"diagram { a -> b;}")
 

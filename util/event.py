@@ -1,4 +1,5 @@
 __all__ = ["EventHook", "EevntWrapper"]
+
 class EventHook(object):
     def __init__(self):
         self.events = []

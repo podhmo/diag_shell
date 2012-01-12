@@ -10,6 +10,6 @@ def extend(app):
         app.options.rename(name)
 
     wrapper.before(rename)
-    wrapper.wrap(app, "eval")
+    wrapper.wrap(app, "blockdiag")
     return app
 
